@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snithyanantham/docker-compose-multiple-apps-heroku-deploy.git"
+    "url": "git+https://github.com/kostadinalmishev/docker-compose-multiple-apps-heroku-deploy.git"
   },
   "keywords": [
     "github",
@@ -21,12 +21,12 @@
     "docker",
     "deploy"
   ],
-  "author": "Nithyanantham Subramaniam",
+  "author": "Kostadin Almishev",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/snithyanantham/docker-compose-multiple-apps-heroku-deploy/issues"
+    "url": "https://github.com/kostadinalmishev/docker-compose-multiple-apps-heroku-deploy/issues"
   },
-  "homepage": "https://github.com/snithyanantham/docker-compose-multiple-apps-heroku-deploy#readme",
+  "homepage": "https://github.com/kostadinalmishev/docker-compose-multiple-apps-heroku-deploy#readme",
   "dependencies": {
     "@actions/core": "^1.2.4"
   },

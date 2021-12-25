@@ -1,6 +1,6 @@
 name: 'Deploy Multiple Docker Images to Heroku Apps'
-author: 'Nithyanantham Subramaniam'
-description: 'A simple action to build multiple docker images using docker-compose, push and deploy your applications to Heroku Apps.'
+author: 'Kostadin Almishev'
+description: 'A simple action to build multiple docker images using docker-compose, push and deploy your applications to Heroku Apps. Fork of Nithyanantham Subramaniam s one'
 inputs:
   email: 
     description: 'Email linked to your Heroku account'
