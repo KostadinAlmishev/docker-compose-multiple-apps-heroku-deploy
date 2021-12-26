@@ -10,7 +10,7 @@ const run = async () => {
 
         await app.buildAndDeploy(login, password, dockerComposeFilePath, imageListString);
     } catch (error) {
-        console.log({message: error.message});
+        console.log(`❌ Error ${{message: error.message}}`);
         core.setFailed(error.message);
     }
 };

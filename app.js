@@ -29,7 +29,7 @@ const loginToHeroku = async (login, password) => {
 
         console.log('Logged in successfully ✅');
     } catch (error) {
-        core.setFailed(`Authentication process failed. Error: ${error.message}`);
+        core.setFailed(`Authentication process failed. ❌\nError: ${error.message}`);
     }
 };
 
@@ -37,17 +37,17 @@ const getImageAppNameList = async heroku_apps => {
     try {
         return JSON.parse(heroku_apps);
     } catch (error) {
-        core.setFailed(`Invalid input for heroku app. Error: ${error.message}`);
+        core.setFailed(`Invalid input for heroku app. ❌\nError: ${error.message}`);
     }
 };
 
 const buildDockerCompose = async dockerComposeFilePath => {
     try {
-        console.log('docker image build started.');
+        console.log('🍺 docker image build started.');
         await exec(`docker-compose -f ${dockerComposeFilePath} build`);
-        console.log('docker image build finished.');
+        console.log('docker image build finished. ✅');
     } catch (error) {
-        core.setFailed(`Something went wrong building your image. Error: ${error.message}`);
+        core.setFailed(`Something went wrong building your image. ❌\nError: ${error.message}`);
     }
 };
 
@@ -55,20 +55,20 @@ const pushAndDeployAllImages = async imageList => {
     try {
         if (imageList.length > 0) {
             await asyncForEach(imageList, async (item) => {
-                console.log('Processing image -' + item.imagename);
+                console.log('🍺 Processing image -' + item.imagename);
                 await exec(`docker tag ${item.imagename} registry.heroku.com/${item.appname}/${item.apptype}`);
-                console.log('Container tagged for image - ' + item.imagename);
+                console.log('🍻 Container tagged for image - ' + item.imagename);
                 await exec(`docker push registry.heroku.com/${item.appname}/web`);
-                console.log('Container pushed for image - ' + item.imagename);
+                console.log('🍻 Container pushed for image - ' + item.imagename);
                 await exec(`heroku container:release ${item.apptype} --app ${item.appname}`);
-                console.log('Container deployed for image - ' + item.imagename);
+                console.log('🍻 Container deployed for image - ' + item.imagename);
             });
             console.log('App Deployed successfully ✅');
         } else {
-            core.setFailed(`No image given to process.`);
+            core.setFailed(`No image given to process. ❌`);
         }
     } catch (error) {
-        core.setFailed(`Something went wrong while pushing and deploying your image. Error: ${error.message}`);
+        core.setFailed(`Something went wrong while pushing and deploying your image. ❌\nError: ${error.message}`);
     }
 };
 
