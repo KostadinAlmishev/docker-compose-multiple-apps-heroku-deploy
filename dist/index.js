@@ -436,14 +436,13 @@ module.exports = require("util");
 const core = __webpack_require__(470);
 const { promisify } = __webpack_require__(669);
 
-const _exec = promisify(__webpack_require__(129).exec);
+const _exec = __webpack_require__(129).exec;
 const exec = promisify(command => {
     const child_proc = _exec(command);
     child_proc.stdout.pipe(process.stdout);
     child_proc.stderr.pipe(process.stderr);
     return child_proc;
 });
-
 
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {

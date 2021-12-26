@@ -1,14 +1,13 @@
 const core = require('@actions/core');
 const { promisify } = require('util');
 
-const _exec = promisify(require('child_process').exec);
+const _exec = require('child_process').exec;
 const exec = promisify(command => {
     const child_proc = _exec(command);
     child_proc.stdout.pipe(process.stdout);
     child_proc.stderr.pipe(process.stderr);
     return child_proc;
 });
-
 
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
