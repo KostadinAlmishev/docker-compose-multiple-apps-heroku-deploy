@@ -1,13 +1,13 @@
 const core = require('@actions/core');
 const {promisify} = require('util');
 
-const _exec = require('child_process').exec;
-const exec = promisify(command => {
-    const child_proc = _exec(command);
-    child_proc.stdout.pipe(process.stdout);
-    child_proc.stderr.pipe(process.stderr);
-    return child_proc;
-});
+const _exec = promisify(require('child_process').exec);
+const exec = command => {
+    const promise = _exec(command);
+    promise.child.stdout.pipe(process.stdout);
+    promise.child.stderr.pipe(process.stderr);
+    return promise;
+};
 
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
@@ -17,7 +17,6 @@ const asyncForEach = async (array, callback) => {
 
 const loginToHeroku = async (login, password) => {
     try {
-
         await exec(`cat >~/.netrc <<EOF
         machine api.heroku.com
             login ${login}
