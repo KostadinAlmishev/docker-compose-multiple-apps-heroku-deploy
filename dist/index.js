@@ -62,7 +62,7 @@ module.exports = require("os");
 const core = __webpack_require__(470);
 const app = __webpack_require__(964);
 
-async function run() {
+const run = async () => {
     try {
         const login = core.getInput('email');
         const password = core.getInput('api_key');
@@ -70,14 +70,13 @@ async function run() {
         const dockerComposeFilePath = core.getInput('docker_compose_file');
 
         await app.buildAndDeploy(login, password, dockerComposeFilePath, imageListString);
-    }
-    catch (error) {
-        console.log({ message: error.message });
+    } catch (error) {
+        console.log({message: error.message});
         core.setFailed(error.message);
     }
-}
+};
 
-run()
+run();
 
 /***/ }),
 
@@ -434,7 +433,7 @@ module.exports = require("util");
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { promisify } = __webpack_require__(669);
+const {promisify} = __webpack_require__(669);
 
 const _exec = __webpack_require__(129).exec;
 const exec = promisify(command => {
@@ -448,9 +447,9 @@ const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array)
     }
-}
+};
 
-const loginToHeroku = async function loginToHeroku(login, password) {
+const loginToHeroku = async (login, password) => {
     try {
 
         await exec(`cat >~/.netrc <<EOF
@@ -463,34 +462,31 @@ const loginToHeroku = async function loginToHeroku(login, password) {
 
         await exec(`echo ${password} | docker login --username=${login} registry.heroku.com --password-stdin`);
 
-        console.log('Logged in succefully ✅');
+        console.log('Logged in successfully ✅');
+    } catch (error) {
+        core.setFailed(`Authentication process failed. Error: ${error.message}`);
     }
-    catch (error) {
-        core.setFailed(`Authentication process faild. Error: ${error.message}`);
-    }
-}
+};
 
-let getImageAppNameList = async function getImageAppNameList(heroku_apps) {
+const getImageAppNameList = async heroku_apps => {
     try {
         return JSON.parse(heroku_apps);
-    }
-    catch (error) {
+    } catch (error) {
         core.setFailed(`Invalid input for heroku app. Error: ${error.message}`);
     }
-}
+};
 
-let buildDockerCompose = async function buildDockerCompose(dockerComposeFilePath) {
+const buildDockerCompose = async dockerComposeFilePath => {
     try {
         console.log('docker image build started.');
         await exec(`docker-compose -f ${dockerComposeFilePath} build`);
         console.log('docker image build finished.');
+    } catch (error) {
+        core.setFailed(`Something went wrong building your image. Error: ${error.message}`);
     }
-    catch (error) {
-        core.setFailed(`Somthing went wrong building your image. Error: ${error.message}`);
-    }
-}
+};
 
-let pushAndDeployAllImages = async function pushAndDeployAllImages(imageList) {
+const pushAndDeployAllImages = async imageList => {
     try {
         if (imageList.length > 0) {
             await asyncForEach(imageList, async (item) => {
@@ -506,19 +502,17 @@ let pushAndDeployAllImages = async function pushAndDeployAllImages(imageList) {
         } else {
             core.setFailed(`No image given to process.`);
         }
+    } catch (error) {
+        core.setFailed(`Something went wrong while pushing and deploying your image. Error: ${error.message}`);
     }
-    catch (error) {
-        core.setFailed(`Somthing went wrong while pushing and deploying your image. Error: ${error.message}`);
-    }
-}
+};
 
-let buildAndDeploy = async function buildAndDeploy(login, password, dockerComposeFilePath, imageListString)
-{
-        await loginToHeroku(login, password);
-        await buildDockerCompose(dockerComposeFilePath);
-        const imageList = await getImageAppNameList(imageListString);
-        await pushAndDeployAllImages(imageList);
-}
+const buildAndDeploy = async (login, password, dockerComposeFilePath, imageListString) => {
+    await loginToHeroku(login, password);
+    await buildDockerCompose(dockerComposeFilePath);
+    const imageList = await getImageAppNameList(imageListString);
+    await pushAndDeployAllImages(imageList);
+};
 
 module.exports.loginToHeroku = loginToHeroku;
 module.exports.getImageAppNameList = getImageAppNameList;
